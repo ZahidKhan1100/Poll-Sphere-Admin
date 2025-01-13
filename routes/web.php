@@ -1,11 +1,14 @@
 <?php
 
-use App\Livewire\Survey\CreateSurvey;
 use Illuminate\Support\Facades\Route;
+use App\Filament\Pages\CreateSurvey;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 
-Route::get('survey/create-survey', CreateSurvey::class);
+
+Route::get('admin/create-survey', CreateSurvey::class)
+    ->name('filament.pages.create-survey');
