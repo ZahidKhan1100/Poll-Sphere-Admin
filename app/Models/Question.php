@@ -17,10 +17,10 @@ class Question extends Model
         return $this->belongsTo(Survey::class);
     }
 
-    // public function choices()
-    // {
-    //     return $this->hasMany(Choice::class);
-    // }
+    public function choices()
+    {
+        return $this->hasMany(Choice::class);
+    }
 
     protected $casts = [
         'type' => QuestionType::class,
