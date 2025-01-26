@@ -31,6 +31,7 @@ class ShowQuestions extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
 
+        
         return $table
             ->query(Question::with(['survey', 'choices']))
 

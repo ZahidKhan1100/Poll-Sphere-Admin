@@ -12,6 +12,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\BulkAction;
@@ -29,7 +30,9 @@ class SurveyResponse extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        return $table->query(Response::with(['survey', 'question', 'choices', 'user']))->columns([
+        return $table->query(
+            Response::with(['survey', 'question', 'choices', 'user'])
+        )->columns([
             TextColumn::make('survey.title')->label('Survey Title')->limit(20)
                 ->tooltip(fn(Response $record): string => "{$record->survey?->title}"),
             TextColumn::make('question.question')->label('Question')->limit(20)
@@ -56,14 +59,17 @@ class SurveyResponse extends Component implements HasForms, HasTable
                 ->getStateUsing(function (Response $record) {
                     return $record->user?->name ?? 'Anonymous';
                 }),
-        ]) ->headerActions([
+        ])->headerActions([
             ExportAction::make()->exporter(SurveyResponseExporter::class)->color('info')->icon('heroicon-o-arrow-down-tray'),
         ])
-        
-        ->bulkActions([
-            ExportBulkAction::make()
-                ->exporter(SurveyResponseExporter::class)
-        ]);
+            ->groups([
+                Group::make('survey.id')
+                    ->collapsible(),
+            ])
+            ->bulkActions([
+                ExportBulkAction::make()
+                    ->exporter(SurveyResponseExporter::class)
+            ]);
     }
 
     public function render()
